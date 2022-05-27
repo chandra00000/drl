@@ -1,0 +1,178 @@
+<div class=" header bg-warning pb-6">
+    <div class=" container-fluid">
+        <div class=" header-body">
+            <div class=" row align-items-center py-4">
+                <div class=" col-lg-6 col-7">
+                    <h6 class=" h2 text-white d-inline-block mb-0">Task View</h6>
+                </div>
+
+              
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" container-fluid mt--6">
+    <div class=" row">
+        <div class=" col-12">
+            <div class=" card">
+               
+
+                <div class="border mb-4">
+                    <div class="col-12">
+                        <div class="mb-5" > <!--*ngIf="tourList"-->
+            
+                            <div class="mb-5 order-table" > <!--*ngFor="let patients of patient_list_visit"-->
+            
+                                <div class=" col-lg-12 col-md-4 pr-lg-3" style="margin-top: 20px;;">
+                                            
+                                                    <div class=" card">
+                                                        <div class=" card-header">
+                                                           <div class=" row">
+                                                            <div class=" col-10">
+                                                                <h3 class=" mb-0">Task ID #{{viewTaskDetail.task_number}}</h3>
+                                                            </div>
+                                                            <div class=" col-2 text-left"><span class=" btn-inner--text"> STATUS: {{viewTaskDetail.live_status}}  </span></div>
+                                                        </div>
+                                                        </div>
+                                                       
+                                                        <div class=" card-body">
+                                                            <form novalidate="" class="ng-untouched ng-pristine ng-valid">
+                                                                <div class=" row">
+                                                                    <div class=" col-md-2">
+                                                                        <div class="form-group" style="margin: bottom 1rem !important">
+                                                                            <div class=" input-group input-group-merge">
+                                                                               Task Type:
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class=" col-md-6">
+                                                                        <div class="form-group"  style="margin: bottom 1rem;">
+                                                                            <div class=" input-group input-group-merge">
+                                                                                {{viewTaskDetail.task_type=='ondemand'?'Ondemand':'Scheduled'}}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class=" row">
+                                                                    <div class=" col-md-2">
+                                                                        <div class="form-group"  style="margin: bottom 1rem !important">
+                                                                            <div class=" input-group input-group-merge">
+                                                                            Runner:
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class=" col-md-6">
+                                                                        <div class="form-group"  style="margin: bottom 1rem !important">
+                                                                            <div class=" input-group input-group-merge">
+                                                                            {{viewTaskDetail.runner?viewTaskDetail.runner.first_name:''}} {{viewTaskDetail.runner?viewTaskDetail.runner.last_name:''}}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class=" row">
+                                                                    <div class=" col-md-2">
+                                                                        <div class="form-group"  style="margin: bottom 1rem;">
+                                                                            <div class=" input-group input-group-merge">
+                                                                               City:
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class=" col-md-6">
+                                                                        <div class="form-group"  style="margin: bottom 1rem !important">
+                                                                            <div class=" input-group input-group-merge">
+                                                                                {{viewTaskDetail.citie?viewTaskDetail.citie.city_name:''}}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class=" row">
+                                                                    <div class=" col-md-2">
+                                                                        <div class="form-group"  style="margin: bottom 1rem !important">
+                                                                            <div class=" input-group input-group-merge">
+                                                                               Date:
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class=" col-md-6">
+                                                                        <div class="form-group"  style="margin: bottom 1rem !important">
+                                                                            <div class=" input-group input-group-merge">
+                                                                                {{viewTaskDetail.date | date: 'dd-MM-yyyy'}}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class=" row"  *ngIf="viewTaskDetail.task_type=='scheduled' && viewTaskDetail.date ==''">
+                                                                    <div class=" col-md-2">
+                                                                        <div class="form-group"  style="margin: bottom 1rem !important">
+                                                                            <div class=" input-group input-group-merge">
+                                                                               Scheduled For:
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class=" col-md-6">
+                                                                        <div class="form-group"  style="margin: bottom 1rem !important">
+                                                                            <div class=" input-group input-group-merge">
+                                                                                {{viewTaskDetail.mon?'Monday, ':''}}
+                                                                                                        {{viewTaskDetail.tue?'Tuesday, ':''}}
+                                                                                                        {{viewTaskDetail.wed?'Wednesday, ':''}}
+                                                                                                        {{viewTaskDetail.thu?'Thusday, ':''}}
+                                                                                                        {{viewTaskDetail.fri?'Friday, ':''}}
+                                                                                                        {{viewTaskDetail.sat?'Saterday, ':''}}
+                                                                                                        {{viewTaskDetail.sun?'Sunday, ':''}}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                             
+                                        
+                                    
+                                </div>
+                                <div class="table-responsive">
+                                    <table
+                                        class="table table-md align-items-center table-flush table-wrap border-bottom">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th class="w-150px">Location Address</th>
+                                                <th class="w-150px">City</th>
+
+
+                                                <th class="w-60">Scheduled Time</th>
+                                                <th>Start/end point</th>
+                                                <th>Status</th>
+                                               
+                                            </tr>
+                                        </thead>
+                                        <tbody >
+                                            <tr *ngFor="let task_locations of viewTaskDetail.task_locations"> <!---->
+                                                <td>{{task_locations.location_address}}</td>
+                                                <td>New Delhi</td>
+                                                    <td>{{task_locations.scheduled_time}}</td>
+                                                <td>{{task_locations.start_point==1?"Start Point":''}} {{task_locations.end_point==1?"End Point":''}}</td>
+                                                <td>
+                                                    <div class="badge badge-success" >{{task_locations.status}}</div>  
+                                                </td>
+            
+                                            </tr>
+                                           
+            
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!--<div class="empty empty-sm" *ngIf="patients.test.length == 0">
+                                    <div class="errortext">No-record Found</div>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                  
+                </div>
+               
+            </div>
+        </div>
+    </div>
+
+</div>

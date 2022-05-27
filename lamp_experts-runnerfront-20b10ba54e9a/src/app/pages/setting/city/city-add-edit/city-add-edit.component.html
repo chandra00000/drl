@@ -1,0 +1,92 @@
+<div>
+    <div class="modal-content overflow-hidden">
+        <div class="modal-header px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">{{ title }}</h4>
+            <button (click)="closeModal()" aria-label="Close" class="close" data-dismiss="modal" type="button"><span
+                aria-hidden="true">×</span></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="cityForm">
+                <div class="row">
+                  
+                  
+                    <div class="col-lg-12">
+                        <div class=" form-group">
+                            <label>City Code <span class="small text-warning">*</span></label>
+                            <input formControlName="city_code"
+                                [ngClass]="{ 'is-invalid': cityInfo.city_code.touched &&  cityInfo.city_code.errors }"
+                                class=" form-control" placeholder="Enter City Code" type="text" />
+                            <div *ngIf="cityInfo.city_code.touched &&  cityInfo.city_code.errors">
+                                <div class="d-block invalid-feedback" *ngIf="cityInfo.city_code.errors.required">City Code is
+                                    required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class=" form-group">
+                            <label>City Name <span class="small text-warning">*</span></label>
+                            <input formControlName="city_name"
+                                [ngClass]="{ 'is-invalid': cityInfo.city_name.touched &&  cityInfo.city_name.errors }"
+                                class=" form-control" placeholder="Enter City Name" type="text" />
+                            <div *ngIf="cityInfo.city_name.touched &&  cityInfo.city_name.errors">
+                                <div class="d-block invalid-feedback" *ngIf="cityInfo.city_name.errors.required">City Name is
+                                    required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               
+              
+                <div class="col-lg-12">
+                    <div class=" form-group">
+                        <label>State <span class="small text-warning">*</span></label>
+                        <select 
+                            formControlName="state_id"
+                            [ngClass]="{ 'is-invalid': cityInfo.state_id.touched &&  cityInfo.state_id.errors }"
+                            class=" form-control" placeholder="State">
+                            <option value="" selected disabled>Select State </option>
+                            <option *ngFor="let state of statelistForDropdown"
+                            [value]="state.id">
+                                {{ state.state_name }}
+                            </option>
+                        </select>
+                        <div *ngIf="cityInfo.state_id.touched &&  cityInfo.state_id.errors">
+                            <div class="d-block invalid-feedback"
+                                *ngIf="cityInfo.state_id.errors.required">State Name is
+                                required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class=" form-group">
+                        <label>Country </label>
+                        <select 
+                            formControlName="country_id"
+                            class=" form-control" placeholder="State" readonly>
+                            <option value="1" selected disabled>India</option>
+                           
+                        </select>
+                        
+                    </div>
+                </div> 
+            </div>
+                <div class="text-md-right">
+                    <button type="button" (click)="closeModal()" class="btn btn-primary">
+                        CANCEL
+                    </button>
+                    <button *ngIf="type == 'add'" type="button" (click)="!isBtnLoaded ? create() : ''" class="btn btn-warning">
+                        <app-loader *ngIf="isBtnLoaded" loaderSize="small" loaderColor="light"></app-loader>
+                        <span *ngIf="!isBtnLoaded">Add</span>
+                    </button>
+
+                    <button *ngIf="type == 'edit'" type="button" (click)="!isBtnLoaded ? edit() : ''" class="btn btn-warning">
+                        <app-loader *ngIf="isBtnLoaded" loaderSize="small" loaderColor="light"></app-loader>
+                        <span *ngIf="!isBtnLoaded">Update</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

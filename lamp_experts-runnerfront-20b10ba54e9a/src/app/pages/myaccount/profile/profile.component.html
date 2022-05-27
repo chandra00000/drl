@@ -1,0 +1,110 @@
+<div class=" header bg-warning pb-6">
+    <div class=" container-fluid">
+        <div class=" header-body">
+            <div class=" row align-items-center py-4">
+                <div class=" col-lg-6 col-7">
+                    <h6 class=" h2 text-white d-inline-block mb-0">My Profile</h6>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" container-fluid mt--6">
+    <div class=" row">
+        <div class=" col-6">
+            
+					<div class=" card">
+                        <div class=" card-header"><h5 class=" h3 mb-0">User Information</h5></div>
+                
+                        <div class=" card-body"  *ngIf="!isLoadedTable">
+                          <ul class=" list-group list-group-flush list my--3">
+                            <li class=" list-group-item px-0">
+                              <div class=" row align-items-center">
+                                <div class=" col-auto">
+                                  <strong>Name</strong>:
+                                </div>
+                
+                                <div class=" col">
+                                  <h5>{{userdata.data.name}}</h5>
+                
+                                </div>
+                              </div>
+                            </li>
+                
+                            <li class=" list-group-item px-0">
+                              <div class=" row align-items-center">
+                                <div class=" col-auto">
+                                  <strong>Phone</strong>:
+                                </div>
+                
+                                <div class=" col">
+                                  <h5>{{userdata.data.phone}}</h5>
+                               
+                                </div>
+                              </div>
+                            </li>
+                
+                            <li class=" list-group-item px-0">
+                              <div class=" row align-items-center">
+                                <div class=" col-auto">
+                                  <strong>Email</strong>:
+                                </div>
+                
+                                <div class=" col">
+                                  <h5>{{userdata.data.email}}</h5>
+                                 
+                                </div>
+                              </div>
+                            </li>
+                
+                            <li class=" list-group-item px-0">
+                              <div class=" row align-items-center">
+                                <div class=" col-auto">
+                                  <strong>City</strong>:
+                                </div>
+                
+                                <div class=" col">
+                                  <h5>{{userdata.data.city}}</h5>
+                
+                                 
+                                </div>
+                              </div>
+                            </li>
+                
+                            <li class=" list-group-item px-0">
+                              <div class=" row align-items-center">
+                                <div class=" col-auto">
+                                 <strong>State</strong>:
+                                </div>
+                
+                                <div class=" col">
+                                  <h5>{{userdata.data.state.state_name}}</h5>
+                
+                                  
+                                </div>
+                              </div>
+                            </li>
+                                <li class=" list-group-item px-0">
+                              <div class=" row align-items-center">
+                                <div class=" col-auto">
+                               <strong>Pincode</strong>:
+                                </div>
+                
+                                <div class=" col">
+                                  <h5>{{userdata.data.pin_code}}</h5>
+                
+                                  
+                                </div>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+        </div>
+    </div>
+
+
+</div>

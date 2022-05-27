@@ -1,0 +1,143 @@
+
+<div class="modal-content overflow-hidden">
+    
+    <div class="modal-header px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">{{ title }}</h4>
+        <button (click)="onClose()" aria-label="Close" class="close" data-dismiss="modal" type="button"><span
+                aria-hidden="true">×</span></button>
+    </div>
+
+    <div class="modal-body" *ngIf="type =='viewLeave'">
+        <form [formGroup]="leaveForm" id="TourForm">
+        <div class="mt-0 mb-4 text-center">
+          
+            
+            <div class="row mb-4">
+              
+                <div class="col-lg-12">
+                    <div class="p-3 bg-secondary">
+                        <div formArrayName="leaves">
+                            <div style="display: flex; flex-direction: column-reverse;">
+                                <div class="row"
+                                    *ngFor="let leaveInfo of leaveForm.get('leaves').controls; let i = index">
+                                    <div class="col-lg-9" [formGroupName]="i" style="margin-left: 5px !important;">
+                                        <div class="row">
+                                            <div class="col-lg-3">
+                                                <div class=" form-group">
+                                                    <label>Leave Type <span class="small text-warning">*</span></label>
+                                                    <select formControlName="leave_type" 
+                                                        [ngClass]="{ 'is-invalid': leaveTouchSubmit &&  leaveForm.controls.leave_type?.errors }"
+                                                        class=" form-control" placeholder="leave_type">
+                                                        <option value=" " selected disabled>Leave Type </option>
+                                                        <option  [value]="1">Sick Leave  </option>
+                                                        <option  [value]="2">Anniversary Leave  </option>
+                                                        <option  [value]="3">Birthday party Leave  </option>
+                                                    </select>
+                                                    <div *ngIf="leaveTouchSubmit && leaveForm.controls.leave_type?.errors">
+                                                        <div class="d-block invalid-feedback" *ngIf="leaveForm.controls.leave_type?.required">State
+                                                            Type is
+                                                            required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class=" form-group">
+            
+                                                    <label>From Date <span class="small text-warning">*</span></label>
+                                                    <input formControlName="from_date" bsDatepicker
+                                                        [bsConfig]="{isAnimated: true,containerClass: 'theme-red', dateInputFormat: 'YYYY-MM-DD'}"
+                                                        [ngClass]="{ 'is-invalid':leaveTouchSubmit &&   leaveForm.controls.from_date?.errors }"
+                                                        class=" form-control" placeholder="DD-MM-YYYY" type="text" />
+    
+                                                    <div
+                                                        *ngIf="leaveTouchSubmit && leaveForm.controls.from_date?.errors">
+                                                        <div class="d-block invalid-feedback"
+                                                            *ngIf="leaveForm.controls.from_date?.errors.required">
+                                                            From Date is required</div>
+            
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class=" form-group">
+            
+                                                    <label>To Date <span class="small text-warning">*</span></label>
+                                                    <input formControlName="to_date" bsDatepicker
+                                                        [bsConfig]="{isAnimated: true,containerClass: 'theme-red', dateInputFormat: 'YYYY-MM-DD'}"
+                                                        [ngClass]="{ 'is-invalid':leaveTouchSubmit &&   leaveForm.controls.to_date?.errors }"
+                                                        class=" form-control" placeholder="DD-MM-YYYY" type="text" />
+    
+                                                    <div
+                                                        *ngIf="leaveTouchSubmit && leaveForm.controls.to_date?.errors">
+                                                        <div class="d-block invalid-feedback"
+                                                            *ngIf="leaveForm.controls.to_date?.errors.required">
+                                                           To Date is required</div>
+            
+                                                    </div>
+                                                </div>
+                                            </div>
+              
+                                            <div class="col-lg-3">
+                                                <div class="form-group ">
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                        <input type="checkbox" id="is_approved{{i}}" 
+                                                            formControlName="is_approved" name="is_approved"
+                                                           class="custom-control-input">
+                                                        <label class="custom-control-label"
+                                                            for="is_approved{{i}}">Is Approved</label>
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+
+                                            </div>
+                                      
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col text-left">
+                                        <button *ngIf="i != lastLoopItem"
+                                            (click)="masterRemoveItem(i)"
+                                            class="btn btn-icon btn-2 btn-warning mb-2 mr-0"
+                                            type="button">
+                                            
+                                            Remove
+                                        </button>
+                                        <button *ngIf="i == lastLoopItem"
+                                            (click)="lastLoopItem <= 9 ? masterAddItem() : ''"
+                                            class="btn  btn-sm btn-primary {{lastLoopItem <= 9 ? '': 'disabled'}}"
+                                            type="button">
+                                           
+                                            Add
+                                            More
+                                        </button>
+                                    </div>
+                                    <div class="col-12">
+                                        <hr class="mt-2">
+                                    </div>
+                                </div>
+            
+            
+                            </div>
+                        </div>
+                    
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-center">
+           
+            <button type="button"  class=" btn btn-outline-warning"
+                (click)="onCloseNext()">No</button>
+            <button type="button" (click)="onSaveLeave()" class="btn btn-warning">
+               <app-loader *ngIf="isBtnLoaded" loaderSize="small" loaderColor="light"></app-loader>
+                <span *ngIf="!isBtnLoaded">Save</span>
+               
+            </button>
+           
+        </div>
+    </form>
+    </div>
+  
+</div>

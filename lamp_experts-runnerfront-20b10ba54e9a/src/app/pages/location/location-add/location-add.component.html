@@ -1,0 +1,213 @@
+<div>
+    <div class="modal-content overflow-hidden">
+        <div class="modal-header px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">{{ title }}</h4>
+            <button (click)="closeModal()" aria-label="Close" class="close" data-dismiss="modal" type="button"><span
+                    aria-hidden="true">×</span></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="locationForm">
+                <div class="row">
+
+
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>Location Code <span class="small text-warning">*</span></label>
+                            <input formControlName="location_code"   
+                                [ngClass]="{ 'is-invalid': locationInfo.location_code.touched &&  locationInfo.location_code.errors }"
+                                class=" form-control" placeholder="Location Code" type="text" (keypress)="omit_special_char($event)" />
+                            <div *ngIf="locationInfo.location_code.touched &&  locationInfo.location_code.errors">
+                                <div class="d-block invalid-feedback" *ngIf="locationInfo.location_code.errors.required">
+                                    Code is
+                                    required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>Location Name <span class="small text-warning">*</span></label>
+                            <input formControlName="location_name"
+                                [ngClass]="{ 'is-invalid': locationInfo.location_name.touched &&  locationInfo.location_name.errors }"
+                                class=" form-control" placeholder="Location Name" type="text" />
+                            <div *ngIf="locationInfo.location_name.touched &&  locationInfo.location_name.errors">
+                                <div class="d-block invalid-feedback" *ngIf="locationInfo.location_name.errors.required">Location is
+                                    required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-8">
+                        <div class=" form-group">
+                            <label>Address <span class="small text-warning">*</span></label>
+                            <input formControlName="address"
+                                [ngClass]="{ 'is-invalid': locationInfo.address.touched &&  locationInfo.address.errors }"
+                                class=" form-control" placeholder="Address " type="text" />
+                            <div *ngIf="locationInfo.address.touched &&  locationInfo.address.errors">
+                                <div class="d-block invalid-feedback" *ngIf="locationInfo.address.errors.required">Address is
+                                    required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class=" form-group">
+                            <label>&nbsp;</label>
+
+                            <button type="button" (click)="getGeocode()" class=" btn btn-primary ">
+                                Geocode
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>Pincode <span class="small text-warning">*</span></label>
+                            <input formControlName="pincode"
+                                [ngClass]="{ 'is-invalid': locationInfo.pincode.touched &&  locationInfo.pincode.errors }"
+                                class=" form-control" placeholder="Pincode" type="text" />
+                            <div *ngIf="locationInfo.pincode.touched &&  locationInfo.pincode.errors">
+                                <div class="d-block invalid-feedback" *ngIf="locationInfo.pincode.errors.required">
+                                    Pincode is
+                                    required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>State </label>
+                            <select formControlName="state_id"
+                            [ngClass]="{ 'is-invalid': locationInfo.state_id.touched &&  locationInfo.state_id.errors }"
+                            class=" form-control" placeholder="State"  (change)="getCities($event)">
+                            <option value="" selected disabled>Select State </option>
+                            <option *ngFor="let state of statelistForDropdown" [value]="state.id">
+                                {{ state.state_name }}
+                            </option>
+                        </select>
+                        <div *ngIf="locationInfo.state_id.touched &&  locationInfo.state_id.errors">
+                            <div class="d-block invalid-feedback" *ngIf="locationInfo.state_id.errors.required">State is
+                                required
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>City <span class="small text-warning">*</span></label>
+                            <select formControlName="city_id"
+                                [ngClass]="{ 'is-invalid': locationInfo.city_id.touched &&  locationInfo.city_id.errors }"
+                                class=" form-control" placeholder="City">
+                                <option value="" selected disabled>Select City </option>
+                                <option *ngFor="let city of citylistForDropdown" [value]="city.id">
+                                    {{ city.city_name }}
+                                </option>
+                            </select>
+                            <div *ngIf="locationInfo.city_id.touched &&  locationInfo.city_id.errors">
+                                <div class="d-block invalid-feedback" *ngIf="locationInfo.city_id.errors.required">State
+                                    City is
+                                    required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>Country </label>
+                            <select formControlName="country_id" class=" form-control" placeholder="Country" readonly>
+                                <option value="1" selected disabled>India</option>
+
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>Latitude <span class="small text-warning">*</span></label>
+                            <input formControlName="lat"
+                                [ngClass]="{ 'is-invalid': locationInfo.lat.touched &&  locationInfo.lat.errors }"
+                                class=" form-control" placeholder="Latitude" type="text" />
+                            <div *ngIf="locationInfo.lat.touched &&  locationInfo.lat.errors">
+                                <div class="d-block invalid-feedback" *ngIf="locationInfo.lat.errors.required">Latitude
+                                    is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>Longitude <span class="small text-warning">*</span></label>
+                            <input formControlName="long"
+                                [ngClass]="{ 'is-invalid': locationInfo.long.touched &&  locationInfo.long.errors }"
+                                class=" form-control" placeholder="Longitute" type="text" />
+                            <div *ngIf="locationInfo.long.touched &&  locationInfo.long.errors">
+                                <div class="d-block invalid-feedback" *ngIf="locationInfo.long.errors.required">Longitude is
+                                    required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>Customer <span class="small text-warning">*</span></label>
+                            <select formControlName="partner_id"
+                                [ngClass]="{ 'is-invalid': locationInfo.partner_id.touched &&  locationInfo.partner_id.errors }"
+                                class=" form-control" placeholder="Customer">
+                                <option value="" selected disabled>Select Customer </option>
+                                <option *ngFor="let customer of customerlistForDropdown" [value]="customer.id">
+                                    {{ customer.partner_name }}
+                                </option>
+                            </select>
+                            <div *ngIf="locationInfo.partner_id.touched &&  locationInfo.partner_id.errors">
+                                <div class="d-block invalid-feedback" *ngIf="locationInfo.partner_id.errors.required">
+                                    Customer is
+                                    required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>&nbsp; </label>
+                            
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-md-right">
+                    <button type="button" (click)="closeModal()" class="btn btn-primary">
+                        CANCEL
+                    </button>
+                    <button *ngIf="type == 'add'" type="button" (click)="!isBtnLoaded ? create() : ''"
+                        class="btn btn-warning">
+                        <app-loader *ngIf="isBtnLoaded" loaderSize="small" loaderColor="light"></app-loader>
+                        <span *ngIf="!isBtnLoaded">Add</span>
+                    </button>
+
+                    <button *ngIf="type == 'edit'" type="button" (click)="!isBtnLoaded ? edit() : ''"
+                        class="btn btn-warning">
+                        <app-loader *ngIf="isBtnLoaded" loaderSize="small" loaderColor="light"></app-loader>
+                        <span *ngIf="!isBtnLoaded">Update</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

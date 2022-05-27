@@ -1,0 +1,379 @@
+<div class=" header bg-warning pb-6">
+    <div class=" container-fluid">
+        <div class=" header-body">
+            <div class=" row align-items-center py-4">
+                <div class=" col-lg-6 col-7">
+                    <h6 *ngIf="isEdit" class=" h2 text-white d-inline-block mb-0">Edit  Planned Tour</h6>
+                    <h6 *ngIf="!isEdit" class=" h2 text-white d-inline-block mb-0">Add  Planned Tour</h6>
+                </div>
+
+                <div class=" col-lg-6 col-5 text-right">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class=" container-fluid mt--6">
+    <div class=" row">
+        <div class=" col-12">
+            <div class=" card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 col-md-offset-3">
+                            <form [formGroup]="addTourForm" id="TourForm">
+                                <div>
+                                    <div class="row mb-4">
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Tour ID<span class="small text-warning">*</span></label>
+                                                <input formControlName="tour_number"
+                                                    [ngClass]="{ 'is-invalid': TourTouchSubmit && TourInfo.tour_number.errors  }"
+                                                    (keypress)="omit_special_char($event)" class="form-control"
+                                                    placeholder="Tour ID " type="text" />
+                                                <div *ngIf="TourTouchSubmit && TourInfo.tour_number.errors ">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TourInfo.tour_number.errors?.required">Tour ID is required
+                                                    </div>
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TourInfo.tour_number.errors.pattern">
+                                                        Enter Valid Tour ID
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label>Tour Name<span class="small text-warning">*</span></label>
+                                                <input formControlName="tour_name"
+                                                    [ngClass]="{ 'is-invalid': TourTouchSubmit && TourInfo.tour_name.errors }"
+                                                    class=" form-control" placeholder="Name" type="text"
+                                                   />
+                                                <div *ngIf="TourTouchSubmit && TourInfo.tour_name.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TourInfo.tour_name.errors?.required">First name is
+                                                        required</div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                     
+                                        <div class="col-lg-2">
+                                            <div class=" form-group">
+                                                <label>State<span class="small text-warning">*</span></label>
+                                                <select formControlName="state_id"
+                                                    [ngClass]="{ 'is-invalid': TourTouchSubmit && TourInfo.state_id.errors }"
+                                                    class=" form-control" placeholder="State" (change)="getCities($event)"  >
+                                                    <option value="">Select State
+                                                    </option>
+                                                    <option *ngFor="let state of statelistForDropdown"
+                                                        [value]="state.id">
+                                                        {{state.state_name}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="TourTouchSubmit && TourInfo.state_id.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TourInfo.state_id.errors?.required">State is required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-lg-2">
+                                            <div class=" form-group">
+                                                <label>City<span class="small text-warning">*</span></label>
+                                                
+                                                <select 
+                                                    formControlName="city_id"
+                                                    [ngClass]="{ 'is-invalid': TourTouchSubmit && TourInfo.city_id.errors }"
+                                                    class=" form-control" placeholder="Select City" #mySelectcity
+                                                  >
+                                                    <option value="">Select City
+                                                    </option>
+                                                    <option *ngFor="let city of citylistForDropdown"
+                                                        [value]="city.id">
+                                                        {{city.city_name}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="TourTouchSubmit && TourInfo.city_id.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TourInfo.city_id.errors?.required">City is
+                                                        required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                     
+                                      
+                                       
+                                      
+                                        
+                                    </div>
+                                
+                                    <div class="row mb-4">
+
+
+                                            <div class="col-lg-10">
+                                            <div class=" form-group">
+                                                <label style="
+                                                margin-right:20px;">Recurrence </label>
+                                                <div 
+                                                class="custom-control custom-checkbox custom-control-inline">
+                                                <input type="checkbox"
+                                                    id="mon"
+                                                    value="mon"
+                                                    formControlName="mon"
+                                                    name="mon"
+                                                    class="custom-control-input">
+                                                <label class="custom-control-label"
+                                                    for="mon">Monday</label>
+                                            </div>
+                                            <div
+                                            class="custom-control custom-checkbox custom-control-inline">
+                                            <input type="checkbox"
+                                                id="tue"
+                                                value="tue"
+                                                formControlName="tue"
+                                                name="tue"
+                                                class="custom-control-input">
+                                            <label class="custom-control-label"
+                                                for="tue">Tuesday</label>
+                                        </div>
+                                        <div
+                                        class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox"
+                                            id="wed"
+                                            value="wed"
+                                            formControlName="wed"
+                                            name="wed"
+                                            class="custom-control-input">
+                                        <label class="custom-control-label"
+                                            for="wed">Wednesday</label>
+                                    </div>
+                                    <div
+                                    class="custom-control custom-checkbox custom-control-inline">
+                                    <input type="checkbox"
+                                        id="thu"
+                                        value="thu"
+                                        formControlName="thu"
+                                        name="thu"
+                                        class="custom-control-input">
+                                    <label class="custom-control-label"
+                                        for="thu">Thusday</label>
+                                </div>   <div
+                                class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox"
+                                    id="fri"
+                                    value="fri"
+                                    formControlName="fri"
+                                    name="fri"
+                                    class="custom-control-input">
+                                <label class="custom-control-label"
+                                    for="fri">Friday</label>
+                            </div>   <div
+                            class="custom-control custom-checkbox custom-control-inline">
+                            <input type="checkbox"
+                                id="sat"
+                                value="sat"
+                                formControlName="sat"
+                                name="sat"
+                                class="custom-control-input">
+                            <label class="custom-control-label"
+                                for="sat">Saterday</label>
+                        </div>   <div
+                        class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox"
+                            id="sun"
+                            value="sun"
+                            formControlName="sun"
+                            name="sun"
+                            class="custom-control-input">
+                        <label class="custom-control-label"
+                            for="sun">Sunday</label>
+                    </div>
+                                            </div>
+                                        </div>
+                                            <div class="col-lg-2">
+    
+                                                    <button *ngIf="!isEdit && tourID ==undefined" type="button"
+                                                    (click)="!nextSaveBtnLoding ? addTour() : ''" class="btn btn-warning px-5">
+                                                    <app-loader *ngIf="nextSaveBtnLoding" loaderSize="small" loaderColor="light">
+                                                    </app-loader>
+                                                    <span *ngIf="!nextSaveBtnLoding">Add Tour</span>
+                                                </button>
+                                                <button *ngIf=" tourID !=undefined && !isEdit" type="button"
+                                                 class="btn btn-warning px-5">
+                                              
+                                                <span >Add Tour</span>
+                                            </button>
+                                           
+                                        <button *ngIf="isEdit" type="button" (click)="!nextSaveBtnLoding ? editTour() : ''"
+                                            class="btn btn-warning" style="margin-top:35px ;">
+                                            <app-loader *ngIf="nextSaveBtnLoding" loaderSize="small" loaderColor="light">
+                                            </app-loader>
+                                            <span *ngIf="!nextSaveBtnLoding">Update Tour</span>
+                                        </button>
+                                               
+                                            </div>
+                                           
+                                               
+                                    
+                                    </div>
+                                  
+                                </div>
+
+                              
+                            </form>
+                          
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" card" style="width:60%;margin-left: 30px;">
+                    <div class=" card-header"><h5 class=" h3 mb-0">Add Tour Locations</h5></div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 col-md-offset-3">
+                                <form [formGroup]="addLocationForm" id="TourForm">
+                                    <div>
+                                        <div class="row mb-4">
+                                                
+                                        <div class="col-lg-8">
+                                            <div class=" form-group">
+                                                <label>Location<span class="small text-warning">*</span></label>
+                                                
+                                              
+                                                <select formControlName="location_address"
+                                                [ngClass]="{ 'is-invalid': LocationTouchSubmit && LocationInfo.location_address.errors }"
+                                                class=" form-control" data-toggle="select" id="selectr-multiple-location" single>
+                                            </select>
+                                                <div *ngIf="LocationTouchSubmit && LocationInfo.location_address.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="LocationInfo.location_address.errors?.required">Location is
+                                                        required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            
+                                            <div class="col-lg-3">
+                                                <div class=" form-group">
+                                                    <label>Schedule Time<span class="small text-warning">*</span></label>
+
+                                                    <input 
+                                                    [ngClass]="{ 'is-invalid': LocationTouchSubmit && LocationInfo.schedule_time?.errors  }"
+                                                    class=" form-control"  ng-model="time" type="time"  formControlName="scheduled_time"  placeholder="HH:mm" min="06:00" max="22:00" required >
+     
+                                                    <div
+                                                    *ngIf="LocationTouchSubmit && LocationInfo.scheduled_time?.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="LocationInfo.scheduled_time?.errors.required">
+                                                        Scheduled Time is required</div>
+        
+                                                </div>
+                                                 
+                                                 </div>
+    
+                                            </div>
+                                            <div class="col-lg-4">
+                                                    <button style="margin-top: 35px;"  type="button"
+                                            (click)="!nextSaveBtnLoding_location ? addLocation() : ''" class="btn btn-warning ">
+                                            <app-loader *ngIf="nextSaveBtnLoding_location" loaderSize="small" loaderColor="light">
+                                            </app-loader>
+                                            <span *ngIf="!nextSaveBtnLoding_location">Add Location</span>
+                                        </button>
+                                           
+                                     
+    
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
+    
+                                  
+                                </form>
+                              
+    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="mb-5" *ngIf="tourLocationlist"> <!--*ngIf="tourList"-->
+                        <h2 class="border-bottom py-2 text-danger font-weight-bold mb-4">Locations</h2>
+        
+                        <div class="mb-5 order-table" > <!--*ngFor="let patients of patient_list_visit"-->
+        
+                            <div class="bg-warning text-white py-2 px-3">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <h4 class="mb-0 text-white"><strong>Tour ID : </strong>{{tourLocationlist.tour_number}}</h4>
+                                    </div>
+                                    <div class="col-auto">
+                                        <h4 class="mb-0 text-white"><strong>Tour Name : </strong>{{tourLocationlist.tour_name}}
+                                        </h4>
+                                    </div>
+                                    <div class="col-auto">
+                                        <h4 class="mb-0 text-white"><strong>City : </strong>{{tourLocationlist.citie?tourLocationlist.citie.city_name:''}}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table
+                                    class="table table-sm align-items-center table-flush table-wrap border-bottom">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="w-150px">Location Name</th>
+                                            <th class="w-60">Scheduled Time</th>
+                                            <th>Start/end point</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngIf="tourLocationlist.tour_locations.length>0">
+                                        <tr *ngFor="let tourlocation of tourLocationlist.tour_locations"> <!---->
+                                            <td>{{tourlocation.location_address}}</td>
+                                            <td>{{tourlocation.scheduled_time}}</td>
+                                            <td>{{tourlocation.start_point==1?"Start Point":''}} {{tourlocation.end_point==1?"End Point":''}}</td>
+                                            <td class="text-center">
+                                             
+                                            <a href="javascript:void(0)" 
+                                                (click)="makeStart(tourlocation)">
+                                                Mark as start point</a>|
+                                            <a href="javascript:void(0)" 
+                                            (click)="makeEnd(tourlocation)">
+                                            Mark as End point
+                                        </a>|
+                                        <a href="javascript:void(0)"
+                                        (click)="delete(tourlocation.id)">
+                                       Delete
+                                    </a>
+                                               
+                                            </td>
+                                        </tr>
+        
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--<div class="empty empty-sm" *ngIf="patients.test.length == 0">
+                                <div class="errortext">No-record Found</div>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+                <div class=" card-footer py-4 text-lg-right">
+                    <button class=" btn btn-primary px-5" (click)="GoBack()"
+                        type="button">Close</button>
+                  
+                </div>
+            </div>
+           
+        </div>
+
+       
+    </div>
+   
+</div>

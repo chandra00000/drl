@@ -1,0 +1,110 @@
+<div>
+    <div class="modal-content overflow-hidden">
+        <div class="modal-header px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">{{ title }}</h4>
+            <button (click)="closeModal()" aria-label="Close" class="close" data-dismiss="modal" type="button"><span
+                    aria-hidden="true">×</span></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="leaveForm">
+                <div class="row">
+
+
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>Runner<span class="small text-warning">*</span></label>
+
+                            <select formControlName="runner_id"
+                            [ngClass]="{ 'is-invalid':  leaveInfo.runner_id.touched  && leaveInfo.runner_id.errors }"
+                            class=" form-control" placeholder="Select Runner" #mySelectcity>
+                                <option value="">Select Runner
+                                </option>
+                                <option *ngFor="let runner of runnerlistForDropdown" [value]="runner.id">
+                                    {{runner.first_name}} {{runner.last_name}}
+                                </option>
+                            </select>
+                            <div *ngIf=" leaveInfo.runner_id.touched  && leaveInfo.runner_id.errors">
+                                <div class="d-block invalid-feedback"
+                                    *ngIf="leaveInfo.runner_id.errors?.required">Runner is
+                                    required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>Leave Type <span class="small text-warning">*</span></label>
+                            <select formControlName="leave_type" 
+                            [ngClass]="{ 'is-invalid': leaveInfo.leave_type.touched && leaveInfo.leave_type.errors }"
+                            class=" form-control" placeholder="leave_type">
+                                <option value="" selected disabled>Leave Type </option>
+                                <option  [value]="1">Medical Leave</option>
+                                <option  [value]="2">Planned Leave</option>
+                                <option  [value]="3">Unplanned leave</option>
+                            </select>
+                            <div *ngIf="leaveInfo.leave_type.touched && leaveInfo.leave_type?.errors">
+                                <div class="d-block invalid-feedback" *ngIf="leaveInfo.leave_type.errors?.required">Leave
+                                    Type is
+                                    required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>From Date <span class="small text-warning">*</span></label>
+                            <input formControlName="from_date" bsDatepicker
+                                [bsConfig]="{isAnimated: true,containerClass: 'theme-red', dateInputFormat: 'DD-MM-YYYY'}"
+                                [ngClass]="{ 'is-invalid': leaveInfo.from_date.touched && leaveInfo.from_date.errors }"
+                                class=" form-control" placeholder="DD-MM-YYYY" type="text" />
+
+                            <div *ngIf="leaveInfo.from_date.touched && leaveInfo.from_date.errors">
+                                <div class="d-block invalid-feedback"
+                                    *ngIf="leaveInfo.from_date.errors?.required">From date is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class=" form-group">
+                            <label>To Date <span class="small text-warning">*</span></label>
+                            <input formControlName="to_date" bsDatepicker
+                                [bsConfig]="{isAnimated: true,containerClass: 'theme-red', dateInputFormat: 'DD-MM-YYYY'}"
+                                [ngClass]="{ 'is-invalid': leaveInfo.to_date.touched && leaveInfo.to_date.errors }"
+                                class=" form-control" placeholder="DD-MM-YYYY" type="text" />
+                                
+                            <div *ngIf="leaveInfo.to_date.touched && leaveInfo.to_date.errors">
+                                <div class="d-block invalid-feedback"
+                                    *ngIf="leaveInfo.to_date.errors?.required">To Date is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+
+             
+                <div class="text-md-right">
+                    <button type="button" (click)="closeModal()" class="btn btn-primary">
+                        CANCEL
+                    </button>
+                    <button *ngIf="type == 'addLeave'" type="button" (click)="!isBtnLoaded ? create() : ''"
+                        class="btn btn-warning">
+                        <app-loader *ngIf="isBtnLoaded" loaderSize="small" loaderColor="light"></app-loader>
+                        <span *ngIf="!isBtnLoaded">Add</span>
+                    </button>
+
+                    <button *ngIf="type == 'EditLeave'" type="button" (click)="!isBtnLoaded ? edit() : ''"
+                        class="btn btn-warning">
+                        <app-loader *ngIf="isBtnLoaded" loaderSize="small" loaderColor="light"></app-loader>
+                        <span *ngIf="!isBtnLoaded">Update</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

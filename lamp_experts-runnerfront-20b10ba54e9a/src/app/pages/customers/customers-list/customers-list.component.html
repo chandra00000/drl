@@ -1,0 +1,163 @@
+<div class=" header bg-warning pb-6">
+    <div class=" container-fluid">
+        <div class=" header-body">
+            <div class=" row align-items-center py-4">
+                <div class=" col-lg-6 col-7">
+                    <h6 class=" h2 text-white d-inline-block mb-0">Customers</h6>
+                </div>
+
+                <div class=" col-lg-6 col-5 text-right">
+                    <a  class=" btn btn-neutral" (click)="addCustomer()" href="javascript:void(0)">
+                        
+                        Add Customer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" container-fluid mt--6">
+    <div class=" row">
+        <div class=" col-12">
+            <div class=" card">
+                <div class=" card-header bcustomer-0">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class=" form-group mb-lg-0" [ngClass]="{ focused: focus === true }">
+                                <div class=" input-group input-group-merge">
+                                    <div class=" input-group-prepend">
+                                        <span class=" input-group-text">
+                                            <i class=" fas fa-search"> </i>
+                                        </span>
+                                    </div>
+
+                                    <input type="text" class="form-control" placeholder="search"
+                                        [(ngModel)]="searchNamefilter" (keydown.enter)="onKeyEnter($event.target.value)" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class=" form-group mb-lg-0 ">
+                                <select  (change)="getCities($event)" [(ngModel)]="stateFilter" class=" form-control" 
+                                id="exampleFormControlSelect3" #mySelectcity
+                             >
+                                <option value="" selected> State </option>
+                                <option *ngFor="let stType of statelistForDropdown" [value]="stType.id">
+                                    {{ stType.state_name }}
+                                </option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class=" form-group mb-lg-0 ">
+                                <select [(ngModel)]="cityFilter" class=" form-control" 
+                                id="exampleFormControlSelect3" #mySelectcity
+                             >
+                                <option value="" selected> City </option>
+                                <option *ngFor="let ctType of citylistForDropdown" [value]="ctType.id">
+                                    {{ ctType.city_name }}
+                                </option>
+                            </select>
+                            </div>
+                        </div>
+                  
+                      
+
+                        <div class="col-md-1">
+                            <button class=" btn btn-warning d-block w-100" (click)="searchCustomer()"
+                                type="button">Apply</button>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-primary" (click)="resetFilter()"
+                            type="button">Reset</button>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="loader-container" *ngIf="isLoadedTable">
+                    <app-loader></app-loader>
+                </div>
+                <div *ngIf="!isLoadedTable">
+                    
+                    <div class=" table-responsive">
+                        <table class=" table table-sm align-items-center table-flush table-wrap">
+                            <thead class=" thead-light">
+                                <tr>
+                                    <th class="sort" (click)="sort('partner_code')" data-sort="empcode">Customer Code</th>
+                                    <th class="sort" (click)="sort('partner_name')" data-sort="first_name">Customer Name</th>
+                                  
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                   
+                                    <th>City</th> 
+                                  <!--<th>Status</th>   -->                                              
+                                    <th scope="col"> Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class=" list">
+
+                                <tr *ngFor="let Customer of customerList">
+                                    <td>{{Customer.partner_code}}</td>
+                                    <td>{{Customer.partner_name}}</td>
+                                    <td>{{Customer.email}}</td>
+                                    <td>{{Customer.phone}}</td>
+                                   
+                                    <td>{{Customer.citie?Customer.citie.city_name:""}}</td>
+                                  <!-- <td>
+                                      <div class="badge badge-warning" *ngIf="Customer.status == 'Inactive'">Inactive</div>  
+                                      <div class="badge badge-warning" *ngIf="Customer.status == 'Active'">Active</div>
+                                    </td>--> 
+                                    <td class=" text-left">
+                                        <div class="dropdown dropleft no-caret" dropdown>
+                                            <a aria-controls="dropdown-basic"
+                                                class="table-btn text-light dropdown-toggle" dropdownToggle
+                                                href="javascript:void(0)" role="button">
+                                                <i class=" fas fa-ellipsis-v"> </i>
+                                            </a>
+
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
+                                                *dropdownMenu>
+                                               
+                                                <a href="javascript:void(0)" class="dropdown-item"
+                                                    (click)="editCustomer(Customer.id)">
+                                                    Edit
+                                                </a>
+                                                <a  href="javascript:void(0)" (click)="deleteCustomer(Customer)"
+                                                class="dropdown-item">
+                                                Delete
+                                            </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class=" card-footer py-4">
+                    <div class="d-flex justify-content-center p-2 align-center pageinationwidth">
+                        <ngb-pagination [collectionSize]="collectionSize" [(page)]="service.page"
+                            (pageChange)="refreshCustomer()" [maxSize]="service.maxSize"
+                            class="pagination-rounded pagination-here">
+                            <ng-template ngbPaginationPrevious>
+                                <i class="fa fa-angle-left"></i>
+                                <span class="sr-only">Previous</span>
+                            </ng-template>
+                            <ng-template ngbPaginationNext>
+                                <i class="fa fa-angle-right"></i>
+                                <span class="sr-only">Next</span>
+                            </ng-template>
+                            <ng-template ngbPaginationEllipsis>...</ng-template>
+                            <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+                        </ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

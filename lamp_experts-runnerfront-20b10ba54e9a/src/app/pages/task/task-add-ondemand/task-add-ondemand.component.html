@@ -1,0 +1,311 @@
+<div class=" header bg-warning pb-6">
+    <div class=" container-fluid">
+        <div class=" header-body">
+            <div class=" row align-items-center py-4">
+                <div class=" col-lg-6 col-7">
+                    <h6 *ngIf="isEdit" class=" h2 text-white d-inline-block mb-0">Edit Task</h6>
+                    <h6 *ngIf="!isEdit" class=" h2 text-white d-inline-block mb-0">Add Task</h6>
+                </div>
+
+                <div class=" col-lg-6 col-5 text-right">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class=" container-fluid mt--6">
+    <div class=" row">
+        <div class=" col-12">
+            <div class=" card">
+                <div class="card-body">
+                    
+                    <div class="row">
+                        <div class="col-md-12 col-md-offset-3">
+                            <form [formGroup]="addTaskForm" id="TaskForm">
+                                <div>
+                                    <div class="row mb-4">
+                                        <div class="col-lg-10">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" id="regular_type" value="ondemand"
+                                                    (ngModelChange)="TaskTypeChange()" formControlName="task_type"
+                                                    name="task_type" class="custom-control-input">
+                                                <label class="custom-control-label" for="regular_type">Create On demand task</label>
+                                                    
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" id="custom_type" value="scheduled" 
+                                                    (ngModelChange)="TaskTypeChange()" formControlName="task_type"
+                                                    name="task_type" class="custom-control-input">
+                                                <label class="custom-control-label" for="custom_type">Create on demand task from tour</label>
+                                            </div>
+                
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col-lg-2"  *ngIf="userId">
+                                            <div class="form-group">
+                                                <label>Task ID<span class="small text-warning">*</span></label>
+                                                <input formControlName="task_number"
+                                                    [ngClass]="{ 'is-invalid': TaskTouchSubmit && TaskInfo.task_number.errors  }"
+                                                    (keypress)="omit_special_char($event)" class="form-control"
+                                                    placeholder="Task ID " type="text"  readonly/>
+                                                <div *ngIf="TaskTouchSubmit && TaskInfo.task_number.errors ">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TaskInfo.task_number.errors?.required">Task ID is
+                                                        required
+                                                    </div>
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TaskInfo.task_number.errors.pattern">
+                                                        Enter Valid Task ID
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                     
+                                        <div class="col-lg-3" >
+                                            <div class=" form-group">
+                                                <label>Runner</label>
+
+                                                <select formControlName="runner_id"
+                                                    class=" form-control" placeholder="Select Runner" #mySelectcity>
+                                                    <option value="">Select Runner
+                                                    </option>
+                                                    <option *ngFor="let runner of runnerlistForDropdown" [value]="runner.id">
+                                                        {{runner.first_name}} {{runner.last_name}}
+                                                    </option>
+                                                </select>
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-lg-2">
+                                            <div class=" form-group">
+                                                <label>Date <span class="small text-warning">*</span></label>
+                                                <input formControlName="date" bsDatepicker
+                                                [minDate]="today"
+                                                    [bsConfig]="{isAnimated: true,containerClass: 'theme-red', dateInputFormat: 'DD-MM-YYYY'}"
+                                                    [ngClass]="{ 'is-invalid': TaskTouchSubmit && TaskInfo.date.errors }"
+                                                    class=" form-control" placeholder="DD-MM-YYYY" type="text" />
+
+                                                <div *ngIf="TaskTouchSubmit && TaskInfo.date.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TaskInfo.date.errors?.required">Date is required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>                 
+
+                                        <div class="col-lg-2">
+                                            <div class=" form-group">
+                                                <label>City<span class="small text-warning">*</span></label>
+
+                                                <select formControlName="city_id"
+                                                    [ngClass]="{ 'is-invalid': TaskTouchSubmit && TaskInfo.city_id.errors }"
+                                                    class=" form-control" placeholder="Select City" #mySelectcity>
+                                                    <option value="">Select City
+                                                    </option>
+                                                    <option *ngFor="let city of citylistForDropdown" [value]="city.id">
+                                                        {{city.city_name}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="TaskTouchSubmit && TaskInfo.city_id.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TaskInfo.city_id.errors?.required">City is
+                                                        required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-2">
+                                            <label>&nbsp;<span class="small text-warning">&nbsp;</span></label>
+
+                                                <button *ngIf="!isEdit && taskID ==undefined" type="button"
+                                                (click)="!nextSaveBtnLoding ? addTask() : ''" class="btn btn-warning px-5">
+                                                <app-loader *ngIf="nextSaveBtnLoding" loaderSize="small" loaderColor="light">
+                                                </app-loader>
+                                                <span *ngIf="!nextSaveBtnLoding">Add Task</span>
+                                            </button>
+                                            <button *ngIf=" taskID !=undefined && !isEdit" type="button"
+                                             class="btn btn-warning px-5">
+                                          
+                                            <span >Add Task</span>
+                                        </button>
+                                       
+                                    <button *ngIf="isEdit" type="button" (click)="!nextSaveBtnLoding ? editTask() : ''"
+                                        class="btn btn-warning" style="margin-top:35px ;">
+                                        <app-loader *ngIf="nextSaveBtnLoding" loaderSize="small" loaderColor="light">
+                                        </app-loader>
+                                        <span *ngIf="!nextSaveBtnLoding">Update Task</span>
+                                    </button>
+                                           
+                                        </div>
+                                       
+                                      
+                                       
+                                      
+                                        
+                                    </div>
+                                
+                                </div>
+
+                              
+                            </form>
+                          
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" card" style="width:60%;margin-left: 30px;">
+                    <div class=" card-header"><h5 class=" h3 mb-0">Add Task Locations</h5></div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 col-md-offset-3">
+                                <form [formGroup]="addLocationForm" id="TaskForm">
+                                    <div>
+                                        <div class="row mb-4">
+                                                
+                                        <div class="col-lg-8">
+                                            <div class=" form-group">
+                                                <label>Location<span class="small text-warning">*</span></label>
+                                                
+                                              
+                                                <select formControlName="location_address"
+                                                [ngClass]="{ 'is-invalid': LocationTouchSubmit && LocationInfo.location_address.errors }"
+                                                class=" form-control" data-toggle="select" id="selectr-multiple-location" single>
+                                            </select>
+                                                <div *ngIf="LocationTouchSubmit && LocationInfo.location_address.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="LocationInfo.location_address.errors?.required">Location is
+                                                        required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            
+                                            <div class="col-lg-3">
+                                                <div class=" form-group">
+                                                    <label>Schedule Time<span class="small text-warning">*</span></label>
+
+                                                    <input 
+                                                    [ngClass]="{ 'is-invalid': LocationTouchSubmit && LocationInfo.schedule_time?.errors  }"
+                                                    class=" form-control"  ng-model="time" type="time"  formControlName="scheduled_time"  placeholder="HH:mm" min="06:00" max="22:00" required >
+     
+                                                    <div
+                                                    *ngIf="LocationTouchSubmit && LocationInfo.scheduled_time?.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="LocationInfo.scheduled_time?.errors.required">
+                                                        Scheduled Time is required</div>
+        
+                                                </div>
+                                                 
+                                                 </div>
+    
+                                            </div>
+                                            <div class="col-lg-4">
+                                                    <button style="margin-top: 35px;"  type="button"
+                                            (click)="!nextSaveBtnLoding_location ? addLocation() : ''" class="btn btn-warning ">
+                                            <app-loader *ngIf="nextSaveBtnLoding_location" loaderSize="small" loaderColor="light">
+                                            </app-loader>
+                                            <span *ngIf="!nextSaveBtnLoding_location">Add Location</span>
+                                        </button>
+                                           
+                                     
+    
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
+    
+                                  
+                                </form>
+                              
+    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="mb-5" *ngIf="taskLocationlist"> <!--*ngIf="TaskList"-->
+                        <h2 class="border-bottom py-2 text-danger font-weight-bold mb-4">Locations</h2>
+        
+                        <div class="mb-5 order-table" > <!--*ngFor="let patients of patient_list_visit"-->
+        
+                            <div class="bg-warning text-white py-2 px-3">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <h4 class="mb-0 text-white"><strong>Task ID : </strong>{{taskLocationlist.task_number}}</h4>
+                                    </div>
+                                    <div class="col-auto">
+                                        <h4 class="mb-0 text-white"><strong>Runner : </strong>{{taskLocationlist.runner?taskLocationlist.runner.first_name:''}}
+                                            {{taskLocationlist.runner?taskLocationlist.runner.last_name:''}}   </h4>
+                                    </div>
+                                    <div class="col-auto">
+                                        <h4 class="mb-0 text-white"><strong>City : </strong>{{taskLocationlist.citie?taskLocationlist.citie.city_name:''}}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table
+                                    class="table table-sm align-items-center table-flush table-wrap border-bottom">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="w-150px">Location Name</th>
+                                            <th class="w-60">Scheduled Time</th>
+                                            <th>Start/end point</th>
+                                            <th>Status</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngIf="taskLocationlist.task_locations.length>0">
+                                        <tr *ngFor="let Tasklocation of taskLocationlist.task_locations"> <!---->
+                                            <td>{{Tasklocation.location_address}}</td>
+                                            <td>{{Tasklocation.scheduled_time}}</td>
+                                            <td>{{Tasklocation.start_point==1?"Start Point":''}} {{Tasklocation.end_point==1?"End Point":''}}</td>
+                                            <td>
+                                                <div class="badge badge-success" >{{Tasklocation.status}}</div>  
+                                            </td>
+         
+                                            <td class="text-center">
+                                             
+                                            <a href="javascript:void(0)" 
+                                                (click)="makeStart(Tasklocation)">
+                                                Mark as start point</a>|
+                                            <a href="javascript:void(0)" 
+                                            (click)="makeEnd(Tasklocation)">
+                                            Mark as End point
+                                        </a>|
+                                        <a href="javascript:void(0)"
+                                        (click)="delete(Tasklocation.id)">
+                                       Delete
+                                    </a>
+                                               
+                                            </td>
+                                        </tr>
+        
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--<div class="empty empty-sm" *ngIf="patients.test.length == 0">
+                                <div class="errortext">No-record Found</div>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+                <div class=" card-footer py-4 text-lg-right">
+                    <button class=" btn btn-primary px-5" (click)="GoBack()"
+                        type="button">Close</button>
+                  
+                </div>
+            </div>
+           
+        </div>
+
+       
+    </div>
+   
+</div>

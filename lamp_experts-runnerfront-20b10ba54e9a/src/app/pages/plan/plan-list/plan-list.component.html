@@ -1,0 +1,152 @@
+<div class=" header bg-warning pb-6">
+    <div class=" container-fluid">
+        <div class=" header-body">
+            <div class=" row align-items-center py-4">
+                <div class=" col-lg-6 col-7">
+                    <h6 class=" h2 text-white d-inline-block mb-0">Plan</h6>
+                </div>
+
+              
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" container-fluid mt--6">
+    <div class=" row">
+        <div class=" col-12">
+            <div class=" card">
+                <div class=" card-header bcustomer-0">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class=" form-group mb-lg-0" [ngClass]="{ focused: focus === true }">
+                                <div class=" input-group input-group-merge">
+                                    <div class=" input-group-prepend">
+                                        <span class=" input-group-text">
+                                            <i class=" fas fa-search"> </i>
+                                        </span>
+                                    </div>
+
+                                    <input type="text" class="form-control" placeholder="search"
+                                        [(ngModel)]="searchNamefilter" (keydown.enter)="onKeyEnter($event.target.value)" />
+                                </div>
+                            </div>
+                        </div>
+                       
+                        
+
+                        <div class="col-md-2">
+                            <div class=" form-group mb-lg-0 ">
+                                <select [(ngModel)]="cityFilter" class=" form-control" (keydown.enter)="searchPhlebos()"
+                                    id="exampleFormControlSelect3" #mySelectcity
+                                    (change)="getAreaCodebyCity(mySelectcity.value)">
+                                    <option value="" selected> Team</option>
+                                    <option value="Active" > Active</option>
+                                    <option value="InActive" > InActive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class=" form-group mb-lg-0 ">
+                                <input type="text" placeholder="From Date" class="form-control" bsDatepicker
+                                    [(ngModel)]="fromDateFilter"
+                                    [bsConfig]="{isAnimated: true,containerClass: 'theme-red', dateInputFormat: 'DD-MM-YYYY'}" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class=" form-group mb-lg-0 ">
+                                <input type="text" [(ngModel)]="toDateFilter" placeholder="To Date" class="form-control"
+                                    bsDatepicker
+                                    [bsConfig]="{isAnimated: true,containerClass: 'theme-red', dateInputFormat: 'DD-MM-YYYY'}" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-1">
+                            <button class=" btn btn-warning d-block w-100" (click)="searchPhlebos()"
+                                type="button">Apply</button>
+                        </div>
+                        <div class="col-md-1">
+                            <button class=" btn btn-warning d-block w-100" (click)="resetFilter()"
+                                type="button">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loader-container" *ngIf="isLoadedTable">
+                    <app-loader></app-loader>
+                </div>
+                <div *ngIf="!isLoadedTable">
+                    
+                    <div class=" table-responsive">
+                        <table class=" table table-sm align-items-center table-flush table-wrap">
+                            <thead class=" thead-light">
+                                <tr>
+                                    <th class="sort" (click)="sort('empcode')" data-sort="empcode">Service Zone</th>
+                                    <th class="sort" (click)="sort('first_name')" data-sort="first_name">Plan Disttance</th>
+                                    <th>Plan Distance</th>
+                                    <th>Plan Time</th>
+                                    <th>Executed Plan</th>                                   
+                                    <th scope="col"> Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class=" list">
+
+                                <tr *ngFor="let phlebo of phleboList">
+                                    <td>{{phlebo.empcode}}</td>
+                                    <td>{{phlebo.first_name}}</td>
+                                    <td>{{phlebo.last_name}}</td>
+                                    <td>{{phlebo.email}}</td>
+                                    <td>{{phlebo.email}}</td>
+               
+                                    <td class=" text-right">
+                                        <div class="dropdown dropleft no-caret" dropdown>
+                                            <a aria-controls="dropdown-basic"
+                                                class="table-btn text-light dropdown-toggle" dropdownToggle
+                                                href="javascript:void(0)" role="button">
+                                                <i class=" fas fa-ellipsis-v"> </i>
+                                            </a>
+
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
+                                                *dropdownMenu>
+                                               
+                                                <a *ngIf="editData" href="javascript:void(0)" class="dropdown-item"
+                                                    (click)="editTask(phlebo.id)">
+                                                    Edit
+                                                </a>
+                                                <a  *ngIf="deleteData" href="javascript:void(0)" (click)="deleteTask(phlebo.id)"
+                                                class="dropdown-item">
+                                                Delete
+                                            </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class=" card-footer py-4">
+                    <div class="d-flex justify-content-center p-2 align-center pageinationwidth">
+                        <ngb-pagination [collectionSize]="collectionSize" [(page)]="service.page"
+                            (pageChange)="refreshPhlebo()" [maxSize]="service.maxSize"
+                            class="pagination-rounded pagination-here">
+                            <ng-template ngbPaginationPrevious>
+                                <i class="fa fa-angle-left"></i>
+                                <span class="sr-only">Previous</span>
+                            </ng-template>
+                            <ng-template ngbPaginationNext>
+                                <i class="fa fa-angle-right"></i>
+                                <span class="sr-only">Next</span>
+                            </ng-template>
+                            <ng-template ngbPaginationEllipsis>...</ng-template>
+                            <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+                        </ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,214 @@
+<div class=" header bg-warning pb-6">
+    <div class=" container-fluid">
+        <div class=" header-body">
+            <div class=" row align-items-center py-4">
+                <div class=" col-lg-6 col-7">
+                    <h6 *ngIf="isEdit" class=" h2 text-white d-inline-block mb-0">Edit Customer</h6>
+                    <h6 *ngIf="!isEdit" class=" h2 text-white d-inline-block mb-0">Add Customer</h6>
+                </div>
+
+                <div class=" col-lg-6 col-5 text-right">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class=" container-fluid mt--6">
+    <div class=" row">
+        <div class=" col-12">
+            <div class=" card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 col-md-offset-3">
+                            <form [formGroup]="addCustomerForm" id="CustomerForm">
+                                <div>
+                                    <div class="row mb-4">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label>Customer Code<span class="small text-warning">*</span></label>
+                                                <input formControlName="partner_code"
+                                                    [ngClass]="{ 'is-invalid': CustomerTouchSubmit && CustomerInfo.partner_code.errors  }"
+                                                    (keypress)="omit_special_char($event)" class="form-control"
+                                                    placeholder="Customer Code " type="text" maxLength="6" />
+                                                <div *ngIf="CustomerTouchSubmit && CustomerInfo.partner_code.errors ">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="CustomerInfo.partner_code.errors?.required">Customer ID is required
+                                                    </div>
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="CustomerInfo.partner_code.errors.pattern">
+                                                        Enter Valid Customer Code
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label>Customer Name<span class="small text-warning">*</span></label>
+                                                <input formControlName="partner_name"
+                                                    [ngClass]="{ 'is-invalid': CustomerTouchSubmit && CustomerInfo.partner_name.errors }"
+                                                    class=" form-control" placeholder="First Name" type="text"
+                                                    />
+                                                <div *ngIf="CustomerTouchSubmit && CustomerInfo.partner_name.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="CustomerInfo.partner_name.errors?.required">Customer name is
+                                                        required</div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                   
+                                        <div class="col-lg-4">
+                                            <div class=" form-group">
+                                                <label>Email</label>
+                                                <input formControlName="email"
+                                                    [ngClass]="{ 'is-invalid': CustomerTouchSubmit && CustomerInfo.email.errors }"
+                                                    class=" form-control" placeholder="Email" type="email" />
+
+                                                <div *ngIf="CustomerTouchSubmit && CustomerInfo.email.errors">
+                                                   
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="CustomerInfo.email.errors.email">
+                                                        Enter Valid email
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class=" form-group">
+                                                <label>Phone<span class="small text-warning">*</span></label>
+                                                <input formControlName="phone"
+                                                    [ngClass]="{ 'is-invalid': CustomerTouchSubmit && CustomerInfo.phone.errors }"
+                                                    class=" form-control" placeholder="Phone"
+                                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                    maxLength="10" type="number" />
+
+                                                <div *ngIf="CustomerTouchSubmit && CustomerInfo.phone.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="CustomerInfo.phone.errors?.required">Phone is required
+                                                    </div>
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="CustomerInfo.phone.errors.pattern">
+                                                        Enter Valid phone
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4">
+                                            <div class=" form-group">
+                                                <label>Address<span class="small text-warning">*</span></label>
+                                                <input formControlName="address"
+                                                    [ngClass]="{ 'is-invalid': CustomerTouchSubmit && CustomerInfo.address.errors }"
+                                                    class=" form-control" placeholder="Address" type="text" />
+
+                                                <div *ngIf="CustomerTouchSubmit && CustomerInfo.address.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="CustomerInfo.address.errors?.required">Address is required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>                                   
+
+                                        <div class="col-lg-4">
+                                            <div class=" form-group">
+                                                <label>State<span class="small text-warning">*</span></label>
+                                                <select formControlName="state_id" 
+                                                    [ngClass]="{ 'is-invalid': CustomerTouchSubmit && CustomerInfo.state_id.errors }"
+                                                    class=" form-control" placeholder="State" (change)="getCities($event)">
+                                                    <option value="">Select State
+                                                    </option>
+                                                    <option *ngFor="let state of statelistForDropdown"
+                                                        [value]="state.id">
+                                                        {{state.state_name}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="CustomerTouchSubmit && CustomerInfo.state_id.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="CustomerInfo.state_id.errors?.required">State is required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class=" form-group">
+                                                <label>City<span class="small text-warning">*</span></label>
+                                                <select 
+                                                    formControlName="city_id"
+                                                    [ngClass]="{ 'is-invalid': CustomerTouchSubmit && CustomerInfo.city_id.errors }"
+                                                    class=" form-control" placeholder="City" #mySelectcity
+                                                   >
+                                                    <option value="">Select City
+                                                    </option>
+                                                    <option *ngFor="let city of citylistForDropdown"
+                                                        [value]="city.id">
+                                                        {{city.city_name}}
+                                                    </option>
+                                                </select>
+
+                                                <div *ngIf="CustomerTouchSubmit && CustomerInfo.city_id.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="CustomerInfo.city_id.errors?.required">City is required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-lg-4">
+                                            <div class=" form-group">
+                                                <label>Pincode<span class="small text-warning">*</span></label>
+                                                <input formControlName="pincode"
+                                                    [ngClass]="{ 'is-invalid': CustomerTouchSubmit && CustomerInfo.pincode.errors }"
+                                                    class=" form-control"
+                                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                    maxlength="6" type="number" placeholder="Pincode" />
+
+                                                <div *ngIf="CustomerTouchSubmit && CustomerInfo.pincode.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="CustomerInfo.pincode.errors?.required">Pincode is required
+                                                    </div>
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="CustomerInfo.pincode.errors.pattern">
+                                                        Enter Valid Pincode
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                       
+                                       
+                                     
+                                       
+                                      
+                                        
+                                    </div>
+
+                                </div>
+
+                                <div class=" card-footer py-4 text-lg-right">
+                                    <button class=" btn btn-primary px-5" (click)="GoBack()"
+                                        type="button">Cancel</button>
+                                    <button *ngIf="!isEdit" type="button"
+                                        (click)="!nextSaveBtnLoding ? addCustomer() : ''" class="btn btn-warning px-5">
+                                        <app-loader *ngIf="nextSaveBtnLoding" loaderSize="small" loaderColor="light">
+                                        </app-loader>
+                                        <span *ngIf="!nextSaveBtnLoding">Add Customer</span>
+                                    </button>
+                                    <button *ngIf="isEdit" type="button"
+                                        (click)="!nextSaveBtnLoding ? editCustomer() : ''" class="btn btn-warning px-5">
+                                        <app-loader *ngIf="nextSaveBtnLoding" loaderSize="small" loaderColor="light">
+                                        </app-loader>
+                                        <span *ngIf="!nextSaveBtnLoding">Update Customer</span>
+                                    </button>
+                                </div>
+                            </form>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

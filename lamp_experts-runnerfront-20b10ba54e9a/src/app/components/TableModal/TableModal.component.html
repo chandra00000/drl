@@ -1,0 +1,64 @@
+<div class="modal-content overflow-hidden p-0">
+    <div class="modal-header d-flex align-items-center border-0">
+        <div class="pl-4">
+            <h3  class="my-3"><strong>Location List</strong></h3>
+           
+        </div>
+        <button (click)="onClose()" aria-label="Close" class="close" data-dismiss="modal" type="button"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body p-0 modal-md">
+       
+        <div class=" mb-4">
+            <div class="col-12">
+                <div class="mb-5" > <!--*ngIf="tourList"-->
+    
+                    <div class="mb-5 order-table" > <!--*ngFor="let patients of patient_list_visit"-->
+    
+                        <div class="table-responsive">
+                            <table
+                                class="table table-md align-items-center table-flush table-wrap border-bottom">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th class="w-150px">Location Name</th>
+                                        <th class="w-150px">City</th>
+                                        <th class="w-150px">State</th>
+                                        <th class="w-60">Scheduled Time</th>
+                                        <th>Start/end point</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <tr *ngFor="let task_locations of viewTaskDetail.task_locations"> <!---->
+                                        <td>{{task_locations.location_address}}</td>
+                                        <td>{{task_locations.citie?task_locations.citie.city_name:''}}</td>
+                                        <td>{{task_locations.state?task_locations.state.state_name:''}}</td>
+                                            <td>{{task_locations.scheduled_time}}</td>
+                                        <td>{{task_locations.start_point==1?"Start Point":''}} {{task_locations.end_point==1?"End Point":''}}</td>
+                                        <td><div class="badge badge-success" >{{task_locations.status}}</div>  
+                                        </td>
+
+                                    </tr>
+                                   
+    
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--<div class="empty empty-sm" *ngIf="patients.test.length == 0">
+                            <div class="errortext">No-record Found</div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+       
+
+        <div class="d-flex align-items-center pb-4 justify-content-center" >
+            <button type="button" data-dismiss="modal" class=" btn btn-outline-warning"
+                (click)="onClose()">Close</button>
+        </div>
+      
+        
+    </div>
+</div>

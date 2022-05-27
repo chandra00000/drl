@@ -1,0 +1,204 @@
+<div class=" header bg-warning pb-6">
+    <div class=" container-fluid">
+        <div class=" header-body">
+            <div class=" row align-items-center py-4">
+                <div class=" col-lg-6 col-7">
+                    <h6 *ngIf="isEdit" class=" h2 text-white d-inline-block mb-0">Edit Task</h6>
+                    <h6 *ngIf="!isEdit" class=" h2 text-white d-inline-block mb-0">Add Task</h6>
+                </div>
+
+                <div class=" col-lg-6 col-5 text-right">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class=" container-fluid mt--6">
+    <div class=" row">
+        <div class=" col-12">
+            <div class=" card">
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-12 col-md-offset-3">
+                            <form [formGroup]="addTaskForm" id="TaskForm">
+                                <div>
+
+                                    <div class="row mb-4">
+                                        <div class="col-lg-10">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" id="regular_type" value="ondemand"
+                                                    (ngModelChange)="TaskTypeChange()" formControlName="task_type"
+                                                    name="task_type" class="custom-control-input">
+                                                <label class="custom-control-label" for="regular_type">Create On demand task</label>
+                                                    
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" id="custom_type" value="scheduled" 
+                                                    (ngModelChange)="TaskTypeChange()" formControlName="task_type"
+                                                    name="task_type" class="custom-control-input">
+                                                <label class="custom-control-label" for="custom_type">Create on demand task from tour</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="row mb-4">
+                                        <div class="col-lg-3" *ngIf="userId">
+                                            <div class="form-group">
+                                                <label>Task ID<span class="small text-warning">*</span></label>
+                                                <input readonly formControlName="task_number"
+                                                    [ngClass]="{ 'is-invalid': TaskTouchSubmit && TaskInfo.task_number.errors  }"
+                                                    (keypress)="omit_special_char($event)" class="form-control"
+                                                    placeholder="Task ID " type="text" />
+                                                <div *ngIf="TaskTouchSubmit && TaskInfo.task_number.errors ">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TaskInfo.task_number.errors?.required">Task ID is
+                                                        required
+                                                    </div>
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TaskInfo.task_number.errors.pattern">
+                                                        Enter Valid Task ID
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                     
+                                        <div class="col-lg-3">
+                                            <div class=" form-group">
+                                                <label>Runner</label>
+
+                                                <select formControlName="runner_id"
+                                                    class=" form-control" placeholder="Select Runner" #mySelectcity>
+                                                    <option value="">Select Runner
+                                                    </option>
+                                                    <option *ngFor="let runner of runnerlistForDropdown" [value]="runner.id">
+                                                        {{runner.first_name}} {{runner.last_name}}
+                                                    </option>
+                                                </select>
+                                              
+                                            </div>
+                                        </div>
+                                     
+                                        <div class="col-lg-3">
+                                            <div class=" form-group">
+                                                <label>City<span class="small text-warning">*</span></label>
+
+                                                <select formControlName="city_id"
+                                                    [ngClass]="{ 'is-invalid': TaskTouchSubmit && TaskInfo.city_id.errors }"
+                                                    class=" form-control" placeholder="Select City" #mySelectcity>
+                                                    <option value="">Select City
+                                                    </option>
+                                                    <option *ngFor="let city of citylistForDropdown" [value]="city.id">
+                                                        {{city.city_name}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="TaskTouchSubmit && TaskInfo.city_id.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TaskInfo.city_id.errors?.required">City is
+                                                        required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class=" form-group">
+                                                <label>Date </label>
+                                                <input formControlName="date" bsDatepicker
+                                                [minDate]="today"
+                                                    [bsConfig]="{isAnimated: true,containerClass: 'theme-red', dateInputFormat: 'DD-MM-YYYY'}"
+                                                    class=" form-control" placeholder="DD-MM-YYYY" type="text" />
+
+                                              
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class=" form-group">
+                                                <label>Assign Tour<span class="small text-warning">*</span></label>
+
+                                                <select formControlName="tour_id"
+                                                    [ngClass]="{ 'is-invalid': TaskTouchSubmit && TaskInfo.tour_id.errors }"
+                                                    class=" form-control" placeholder="Select Tour" #mySelecttour
+                                                    (change)="getTourLocation($event)"
+                                                    >
+                                                    <option value="">Select Tour
+                                                    </option>
+                                                    <option *ngFor="let tour of tourlistForDropdown" [value]="tour.id">
+                                                        {{tour.tour_name}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="TaskTouchSubmit && TaskInfo.tour_id.errors">
+                                                    <div class="d-block invalid-feedback"
+                                                        *ngIf="TaskInfo.tour_id.errors?.required">Tour is
+                                                        required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+                                    <div class=" card" style="width: 50%;" *ngIf="tourLocationlistForDropdown.length>0">
+                                        <div class=" card-header"><h5 class=" h3 mb-0">Tour Locations</h5></div>
+                                    <div class=" card-body">
+                                    <div class="row" >
+                                         <div class="col-md-12">
+                                        <table class="table table-sm align-items-center table-flush" >
+                                            <thead class="thead-light">
+                                                <th>Location</th>
+                                                <th class="text-center">Scheduled Time</th>
+                                            </thead>
+                                            <tbody >
+                                               
+                                                <tr  *ngFor="let tourLocation of tourLocationlistForDropdown">
+                                                    <td>
+                                                        {{tourLocation.location_address}}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{tourLocation.scheduled_time}}
+                                                    </td>
+                                                </tr>
+                                               
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                        </div>
+                                    </div>
+                                  
+                                  
+                                   
+                                </div>
+
+                                <div class=" card-footer py-4 text-lg-right">
+                                    <button class=" btn btn-primary px-5" (click)="GoBack()"
+                                        type="button">Cancel</button>
+                                    <button *ngIf="!isEdit" type="button" (click)="!nextSaveBtnLoding ? addTask() : ''"
+                                        class="btn btn-warning px-5">
+                                        <app-loader *ngIf="nextSaveBtnLoding" loaderSize="small" loaderColor="light">
+                                        </app-loader>
+                                        <span *ngIf="!nextSaveBtnLoding">Add Task</span>
+                                    </button>
+                                    <button *ngIf="isEdit" type="button" (click)="!nextSaveBtnLoding ? editTask() : ''"
+                                        class="btn btn-warning px-5">
+                                        <app-loader *ngIf="nextSaveBtnLoding" loaderSize="small" loaderColor="light">
+                                        </app-loader>
+                                        <span *ngIf="!nextSaveBtnLoding">Update Task</span>
+                                    </button>
+                                </div>
+                            </form>
+
+
+                        </div>
+                    </div>
+                 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

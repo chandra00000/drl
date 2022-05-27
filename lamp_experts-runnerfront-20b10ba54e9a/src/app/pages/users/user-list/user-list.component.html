@@ -1,0 +1,158 @@
+<div class=" header bg-warning pb-6">
+    <div class=" container-fluid">
+        <div class=" header-body">
+            <div class=" row align-items-center py-4">
+                <div class=" col-lg-6 col-7">
+                    <h6 class=" h2 text-white d-inline-block mb-0">Users</h6>
+                </div>
+
+                <div class=" col-lg-6 col-5 text-right">
+                    <a  class=" btn btn-neutral" (click)="addUser()" href="javascript:void(0)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-plus-lg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
+                        </svg>
+                        Add User
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" container-fluid mt--6">
+    <div class=" row">
+        <div class=" col-12">
+            <div class=" card">
+                <div class=" card-header bcustomer-0">
+                    <div class="row no-gutters">
+                        <div class="col-md-3">
+                            <div class=" form-group mr-lg-2 mb-lg-0" [ngClass]="{ focused: focus === true }">
+                                <div class=" input-group input-group-merge">
+                                    <div class=" input-group-prepend">
+                                        <span class=" input-group-text">
+                                            <i class=" fas fa-search"> </i>
+                                        </span>
+                                    </div>
+
+                                    <input type="text" class="form-control" placeholder="search"
+                                        [(ngModel)]="searchNamefilter" />
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="col-md-2">
+                            <div class=" form-group mb-lg-0 mr-lg-2">
+                                <select [(ngModel)]="roleFilter" class=" form-control" id="exampleFormControlSelect3">
+                                    <option value="" disabled selected> Role </option>
+                                    <option value=""> All </option>
+                                    <option *ngFor="let item of customerDropDown" [value]="item.id">
+                                            {{ item.name }}
+                                        </option>
+                                </select>
+                            </div>
+                        </div>-->
+                        <div class="col-md-2">
+                            <div class=" form-group mb-lg-0 mr-lg-2">
+                                <select [(ngModel)]="statusFilter" class=" form-control" id="exampleFormControlSelect3">
+                                    <option value="" desabled selected> Status </option>
+                                    <option value="Active"> Active </option>
+                                    <option value="Inactive"> Inactive </option>
+                                   <!--<option *ngFor="let item of citylistForDropdown" [value]="item.city">
+                                            {{ item.city }}
+                                        </option>--> 
+                                </select>
+                            </div>
+                        </div>
+                      
+                        <div class="col-md-2">
+                            <button class=" btn btn-warning" (click)="searchCustomers()"
+                                type="button">Apply</button>
+                            <button class="btn btn-primary" (click)="resetFilter()"
+                                type="button">Reset</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="loader-container" *ngIf="isLoadedTable">
+                    <app-loader></app-loader>
+                </div>
+                <div *ngIf="!isLoadedTable">
+                    <div class=" table-responsive">
+                        <table class=" table table-sm align-items-center table-flush">
+                            <thead class=" thead-light">
+                                <tr>
+                                    <th class="sort" (click)="sort('first_name')" data-sort="first_name">First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                   
+                                    <th>Status</th>
+                                    <th class="text-lg-right">Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class=" list">
+                               <tr *ngFor="let item of userList">
+                                    <td>{{item.first_name}}</td>
+                                    <td>{{item.last_name}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.phone}}</td>
+                                  
+                                    <td><div class="badge badge-success" *ngIf="item.status=='Active'">Active</div><div class="badge badge-danger" *ngIf="item.status=='Inactive'">Inactive</div></td>
+                                    <td class="text-lg-right">
+                                        <div class="dropdown dropleft no-caret" dropdown>
+                                            <a aria-controls="dropdown-basic"
+                                                class="table-btn text-light dropdown-toggle"
+                                                dropdownToggle href="javascript:void(0)" role="button">
+                                                <i class=" fas fa-ellipsis-v"> </i>
+                                            </a>
+
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
+                                                *dropdownMenu>
+                                                <a   href="javascript:void(0)" (click)="delete(item)"
+                                                    class="dropdown-item">
+                                                    Delete
+                                                </a>
+                                                <a  href="javascript:void(0)" (click)="editUser(item.id)" class="dropdown-item">
+                                                    Edit
+                                                </a>
+                                                <a *ngIf="item.status == 'Active' " href="javascript:void(0)" (click)="updateStatus(item.id, 'Inactive')"  class="dropdown-item">
+                                                    Inactive
+                                                </a>
+                                                <a *ngIf="item.status == 'Inactive' " href="javascript:void(0)" (click)="updateStatus(item.id, 'Active')"  class="dropdown-item">
+                                                    Active
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="empty" *ngIf="userList.length == 0">
+                        <div class="errortext">No-record Found</div>
+                    </div>
+                </div>
+                <div class=" card-footer py-4">
+                    <div class="d-flex justify-content-center p-2 align-center pageinationwidth">
+                        <ngb-pagination [collectionSize]="collectionSize" [(page)]="service.page"
+                            (pageChange)="refreshUsers()" [maxSize]="service.maxSize"
+                            class="pagination-rounded pagination-here">
+                            <ng-template ngbPaginationPrevious>
+                                <i class="fa fa-angle-left"></i>
+                                <span class="sr-only">Previous</span>
+                            </ng-template>
+                            <ng-template ngbPaginationNext>
+                                <i class="fa fa-angle-right"></i>
+                                <span class="sr-only">Next</span>
+                            </ng-template>
+                            <ng-template ngbPaginationEllipsis>...</ng-template>
+                            <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+                        </ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
